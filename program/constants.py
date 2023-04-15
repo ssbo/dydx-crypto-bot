@@ -11,7 +11,7 @@ SELL = "SELL"
 MODE = MODE_DEVELOPMENT
 
 # Close all open positions and orders
-ABORT_ALL_POSITIONS = True
+ABORT_ALL_POSITIONS = False
 
 # Find cointegrated pairs
 FIND_COINTEGRATED = True
