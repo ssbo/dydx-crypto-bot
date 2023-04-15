@@ -1,4 +1,4 @@
 
 
 if __name__ == "__main__":
-    print("Hello bot2!")
+    print("Hello bot2g!")
