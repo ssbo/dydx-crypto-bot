@@ -8,39 +8,65 @@ import time
 # Get relevant time periods
 ISO_TIMES = get_ISO_times()
 
-# Get Candles Historical
-def get_candles_historical(client, market):
+# Get Candles recent
+def get_candles_recent(client, market):
 
-  # Define output
-  close_prices = []
+    # Define output
+    close_prices = []
 
-  # Extract historical price data for each timeframe
-  for timeframe in ISO_TIMES.keys():
-
-    # Confirm times needed
-    tf_obj = ISO_TIMES[timeframe]
-    from_iso = tf_obj["from_iso"]
-    to_iso = tf_obj["to_iso"]
-
-    # Protect rate limits
+    # Protect API
     time.sleep(0.2)
 
     # Get data
     candles = client.public.get_candles(
-      market=market,
-      resolution=RESOLUTION,
-      from_iso=from_iso,
-      to_iso=to_iso,
-      limit=100
-    )
+        market= market,
+        resolution=RESOLUTION,
+        limit=100
+  )
 
     # Structure data
     for candle in candles.data["candles"]:
-      close_prices.append({"datetime": candle["startedAt"], market: candle["close"] })
+        close_prices.append(candle["close"])
 
-  # Construct and return DataFrame
-  close_prices.reverse()
-  return close_prices
+    # Construct and return close price series
+    close_prices.reverse()
+    prices_result = np.array(close_prices).astype(np.float)
+    return prices_result
+
+
+# Get Candles Historical
+def get_candles_historical(client, market):
+
+    # Define output
+    close_prices = []
+
+    # Extract historical price data for each timeframe
+    for timeframe in ISO_TIMES.keys():
+
+        # Confirm times needed
+        tf_obj = ISO_TIMES[timeframe]
+        from_iso = tf_obj["from_iso"]
+        to_iso = tf_obj["to_iso"]
+
+        # Protect rate limits
+        time.sleep(0.2)
+
+        # Get data
+        candles = client.public.get_candles(
+        market=market,
+        resolution=RESOLUTION,
+        from_iso=from_iso,
+        to_iso=to_iso,
+        limit=100
+        )
+
+        # Structure data
+        for candle in candles.data["candles"]:
+            close_prices.append({"datetime": candle["startedAt"], market: candle["close"] })
+
+    # Construct and return DataFrame
+    close_prices.reverse()
+    return close_prices
 
 # Construct market prices
 def construct_market_prices(client):
