@@ -3,6 +3,7 @@ from decouple import config
 
 MODE_DEVELOPMENT = "DEVELOPMENT"
 MODE_PRODUCTION = "PRODUCTION"
+SAVED = "saved"
 
 BUY = "BUY"
 SELL = "SELL"
